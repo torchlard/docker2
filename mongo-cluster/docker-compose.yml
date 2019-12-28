@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  mongo1:
+    container_name: mongo1
+    # build: .
+    image: mongo:4.2.2
+    ports:
+      - 27020:27017
+    volumes:
+      - ./config/mongod.conf:/etc/mongod.conf
+      - data2:/data/db
+      # - type: volume
+      #   source: data2
+      #   target: /data/db
+      #   volume:
+      #     nocopy: false
+        # read_only: false
+    # command: tail -f /dev/null 
+    command: mongod --config /etc/mongod.conf
+    # command: mongod --bind_ip_all --replSet "rs0"
+    # links:
+    #   - mongo2
+    #   - mongo3
+  
+  # mongo2:
+  #   container_name: mongo2
+  #   image: mongo:4.2.2
+  #   ports:
+  #     - 27021:27017
+  #   # volumes:
+  #   #   - ./scripts:/scripts
+  #   command: mongod --bind_ip_all --replSet "rs0"
+
+  # mongo3:
+  #   container_name: mongo3
+  #   image: mongo:4.2.2
+  #   ports:
+  #     - 27022:27017
+  #   # volumes:
+  #   #   - ./scripts:/scripts
+  #   command: mongod --bind_ip_all --replSet "rs0"
+
+  # creator:
+  #   image: mongo:4.2.2
+  #   volumes:
+  #     - ./scripts:/scripts
+  #   command: /scripts/init.sh
+  #   depends_on: 
+  #     - mongo1
+  #     - mongo2
+  #     - mongo3
+
+volumes:
+  data2:
+
+

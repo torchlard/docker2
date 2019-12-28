@@ -1,0 +1,65 @@
+version: '3.1'
+
+services:
+  galera-node1:
+    build: ./node1
+    # restart: always
+    container_name: galera-node1
+    ports:
+      - 3310:3306
+    networks:
+      galera_net:
+        ipv4_address: 172.227.0.10
+    command: mysqld --wsrep-new-cluster
+    # volumes:
+    #   - type: volume
+    # command: tail -f /dev/null    
+    # volumes:
+    #   - '/home/lkit/data/mysql1:/var/lib/mysql'
+    #   - '/home/lkit/data/log1:/var/log/mysql'
+
+  galera-node2:
+    build: ./node2
+    # restart: always
+    container_name: galera-node2
+    ports:
+      - 3311:3306
+    networks:
+      galera_net:
+        ipv4_address: 172.227.0.11  
+    depends_on:
+      - "galera-node1"
+    command: mysqld
+    # command: tail -f /dev/null
+    # volumes:
+    #   - '/home/lkit/data/mysql2:/var/lib/mysql'
+    #   - '/home/lkit/data/log2:/var/log/mysql'
+
+  galera-node3:
+    build: ./node3
+    # restart: always
+    container_name: galera-node3
+    ports:
+      - 3312:3306
+    networks:
+      galera_net:
+        ipv4_address: 172.227.0.12
+    depends_on:
+      - "galera-node1"
+    command: mysqld
+    # command: tail -f /dev/null
+    # volumes:
+    #   - '/home/lkit/data/mysql3:/var/lib/mysql'
+    #   - '/home/lkit/data/log3:/var/log/mysql'
+
+networks:
+  galera_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.227.0.0/16"    
+
+
+
+
+

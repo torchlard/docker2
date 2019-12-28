@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  node1:
+    image: "alpine:latest"
+    container_name: node1
+    command: tail -f /dev/null
+    networks:
+      alpnet:
+        ipv4_address: 172.228.0.10
+
+  node2:
+    image: "alpine:latest"
+    container_name: node2
+    command: tail -f /dev/null
+    networks:
+      alpnet:
+        ipv4_address: 172.228.0.20
+    
+
+  node3:
+    image: "alpine:latest"
+    container_name: node3
+    command: tail -f /dev/null
+    networks:
+      alpnet:
+        ipv4_address: 172.228.0.30
+    depends_on:
+      - "node1"
+
+networks:
+  alpnet:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.228.0.0/16"
+
+
+
